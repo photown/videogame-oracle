@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Success predictor</title>
+    <style type="text/css">
+    .prediction {
+      color: green;
+      font-size: xx-large;
+    }
+    </style>
+</head>
+<body>
+    * marks a required field
+    <form action="/" method='POST'>
+      Title*:<br>
+      <input type="text" name="title" value='{{args.user_args.title}}' required><br>
+      Description*:<br>
+      <textarea name="description" rows="10" cols="50" required>{{args.user_args.description}}</textarea><br>
+      Genres*:<br>
+      <select name="genres" multiple required>
+        {% for genre in args.genres %}
+            {% if genre in args.user_args.genres %}
+            <option value="{{genre}}" selected>{{genre}}</option>
+            {% else %}
+            <option value="{{genre}}">{{genre}}</option>
+            {% endif %}
+        {% endfor %}
+      </select><br>
+      Publishers*:<br>
+      <select name="publishers" multiple required>
+        {% for publisher in args.publishers %}
+            {% if publisher in args.user_args.publishers %}
+            <option value="{{publisher}}" selected>{{publisher}}</option>
+            {% else %}
+            <option value="{{publisher}}">{{publisher}}</option>
+            {% endif %}
+        {% endfor %}
+      </select><br>
+      Platforms*:<br>
+      <select name="platforms" multiple required>
+        {% for platform in args.platforms %}
+            {% if platform in args.user_args.platforms %}
+            <option value="{{platform}}" selected>{{platform}}</option>
+            {% else %}
+            <option value="{{platform}}">{{platform}}</option>
+            {% endif %}
+        {% endfor %}
+      </select><br>
+      Game modes*:<br>
+      <select name="game_modes" multiple required>
+        {% for game_mode in args.game_modes %}
+            {% if game_mode in args.user_args.game_modes %}
+            <option value="{{game_mode}}" selected>{{game_mode}}</option>
+            {% else %}
+            <option value="{{game_mode}}">{{game_mode}}</option>
+            {% endif %}
+        {% endfor %}
+      </select><br>
+      Budget (in millions $)*:<br>
+      <input name="budget" type="number" step="0.01" value='{{args.user_args.budget}}' required><br>
+      Estimated release date*:<br>
+      <input name="release_date" type="date" value='{{args.user_args.release_date}}' required><br>
+      <input type="submit" value="Submit">
+    </form>
+    {% if 'prediction' in args %}
+    <span class='prediction'>The game is predicted to sell {{args.prediction[0]}} million copies.<br>({{args.prediction[1]}}% confidence for ±{{args.prediction[2]}} million copies)</span>
+    {% endif %}
+</body>
+</html>
