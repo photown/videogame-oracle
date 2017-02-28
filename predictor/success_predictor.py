@@ -5,6 +5,7 @@ import datetime
 from sklearn.metrics import precision_score
 from db.games_db import GamesDb
 from extractor.keyword_extractor import KeywordExtractor
+from random import shuffle
 
 
 class SuccessPredictor:
@@ -24,13 +25,17 @@ class SuccessPredictor:
         test_size = int(n * 0.2)
         accuracies = []
         bucket_size = 5  # +/- 5 million
+        shuffled = zip(input_data, output_data)
+        shuffle(shuffled)
+        input_data = [pair[0] for pair in shuffled]
+        output_data = [pair[1] for pair in shuffled]
         for i in range(0, 5):
             test_input_data = input_data[i * test_size:(i + 1) * test_size]
             test_output_data = output_data[i * test_size:(i + 1) * test_size]
-            train_input_data = input_data[
-                :i * test_size] + input_data[(i + 1) * test_size:]
-            train_output_data = output_data[
-                :i * test_size] + output_data[(i + 1) * test_size:]
+            train_input_data = input_data[:i * test_size] \
+                + input_data[(i + 1) * test_size:]
+            train_output_data = output_data[:i * test_size] \
+                + output_data[(i + 1) * test_size:]
 
             results = self.__init_predictor(
                 train_input_data, train_output_data, test_input_data)
