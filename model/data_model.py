@@ -1,4 +1,5 @@
 class DataModel:
+
     def __init__(self):
         self._name = None
         self._genres = set()
@@ -70,7 +71,7 @@ class DataModel:
     @release_quarter.setter
     def release_quarter(self, value):
         self._release_quarter = value
-    
+
     @property
     def release_date(self):
         return self._release_date
@@ -94,12 +95,12 @@ class DataModel:
 
     def __str__(self):
         return 'name: ' + str(self.name) + '\n' \
-        'genres: ' + str(self.genres) + '\n' \
-        'publishers: ' + str(self.publishers) + '\n' \
-        'platforms: ' + str(self.platforms) + '\n' \
-        'budget: ' + str(self.budget) + '\n' \
-        'sold_units: ' + str(self.sold_units) + '\n' \
-        'game_modes: ' + str(self.game_modes) + '\n' \
-        'keywords: ' + str(self.keywords) + '\n' \
-        'release_quarter: ' + str(self.release_quarter) + '\n' \
-        'release_date: ' + str(self.release_date) + '\n'
+            'genres: ' + str(self.genres) + '\n' \
+            'publishers: ' + str(self.publishers) + '\n' \
+            'platforms: ' + str(self.platforms) + '\n' \
+            'budget: ' + str(self.budget) + '\n' \
+            'sold_units: ' + str(self.sold_units) + '\n' \
+            'game_modes: ' + str(self.game_modes) + '\n' \
+            'keywords: ' + str(self.keywords) + '\n' \
+            'release_quarter: ' + str(self.release_quarter) + '\n' \
+            'release_date: ' + str(self.release_date) + '\n'

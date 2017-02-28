@@ -5,6 +5,7 @@ import unicodecsv
 import re
 from db.games_db import GamesDb
 
+
 def fetch_data(sales_data, igdb_fetcher):
     for x in sales_data.keys():
         print '---------------------------------'
@@ -12,6 +13,7 @@ def fetch_data(sales_data, igdb_fetcher):
             del sales_data[x]
             continue
         print sales_data[x]
+
 
 def populate_records():
     db = GamesDb()

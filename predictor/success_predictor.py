@@ -6,37 +6,45 @@ from sklearn.metrics import precision_score
 from db.games_db import GamesDb
 from extractor.keyword_extractor import KeywordExtractor
 
+
 class SuccessPredictor:
 
     def __init__(self):
         self.keyword_extractor = KeywordExtractor()
 
     def predict(self, games, games_args, input_data):
-        input_data, output_data = self.__extract_input_output_data(games, games_args)
+        input_data, output_data = self.__extract_input_output_data(
+            games, games_args)
         return self.__init_predictor(input_data, output_data, input_data)
 
     def perform_cross_validation(self, games, games_args):
-        input_data, output_data = self.__extract_input_output_data(games, games_args)
+        input_data, output_data = self.__extract_input_output_data(
+            games, games_args)
         n = len(input_data)
         test_size = int(n * 0.2)
         accuracies = []
-        bucket_size = 5 # +/- 5 million
+        bucket_size = 5  # +/- 5 million
         for i in range(0, 5):
-            test_input_data = input_data[i*test_size:(i+1)*test_size]
-            test_output_data = output_data[i*test_size:(i+1)*test_size]
-            train_input_data = input_data[:i*test_size] + input_data[(i+1)*test_size:]
-            train_output_data = output_data[:i*test_size] + output_data[(i+1)*test_size:]
-            
-            results = self.__init_predictor(train_input_data, train_output_data, test_input_data)
+            test_input_data = input_data[i * test_size:(i + 1) * test_size]
+            test_output_data = output_data[i * test_size:(i + 1) * test_size]
+            train_input_data = input_data[
+                :i * test_size] + input_data[(i + 1) * test_size:]
+            train_output_data = output_data[
+                :i * test_size] + output_data[(i + 1) * test_size:]
+
+            results = self.__init_predictor(
+                train_input_data, train_output_data, test_input_data)
 
             for j in range(0, test_size):
                 expected = test_output_data[j]
                 actual = results[j]
-                accuracies.append(100 * int(abs(expected-actual) < bucket_size))
-                print "Expected " + str(test_output_data[j]) + ", got " + str(results[j])
+                accuracies.append(
+                    100 * int(abs(expected - actual) < bucket_size))
+                print "Expected " + str(test_output_data[j]) + \
+                    ", got " + str(results[j])
         average = reduce(lambda x, y: x + y, accuracies) / float(n)
         print "Cross validation result = " + str(average) + "%"
-        return (average, bucket_size)    
+        return (average, bucket_size)
 
     def parse_data_for_predictor(self, args, game_args):
         publishers = args['publishers']
@@ -93,7 +101,8 @@ class SuccessPredictor:
             output_data.append(game.sold_units)
         return (input_data, output_data)
 
-    def __init_predictor(self, train_input_data, train_output_data, input_data):
+    def __init_predictor(self, train_input_data, train_output_data,
+                         input_data):
         y = train_output_data
         X = train_input_data
         clf = SVR(C=100, epsilon=0.1, kernel='rbf')
