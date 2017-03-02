@@ -65,16 +65,17 @@ class GamesDb:
     def query_all_games(self):
         cursor = self.connection.cursor()
         rows = cursor.execute(
-            'SELECT name, budget, sold_units, release_quarter, release_date,'
+            'SELECT name, budget, sold_units, release_quarter, release_date, '
             'publisher, platform, game_mode, genre FROM games '
-            'INNER JOIN games_publishers'
+            'INNER JOIN games_publishers '
             'ON games_publishers.game_id = games.name '
-            'INNER JOIN games_platforms'
+            'INNER JOIN games_platforms '
             'ON games_platforms.game_id = games.name '
-            'INNER JOIN games_game_modes'
+            'INNER JOIN games_game_modes '
             'ON games_game_modes.game_id = games.name '
-            'INNER JOIN games_genres'
-            'ON games_genres.game_id = games.name ')
+            'INNER JOIN games_genres '
+            'ON games_genres.game_id = games.name'
+            )
 
         games = {}
         for game in rows:
@@ -100,7 +101,7 @@ class GamesDb:
     def query_all_keywords(self):
         cursor = self.connection.cursor()
         rows = cursor.execute(
-            'SELECT name, keyword FROM games INNER JOIN games_keywords'
+            'SELECT name, keyword FROM games INNER JOIN games_keywords '
             'ON games.name = games_keywords.game_id')
         return rows.fetchall()
 
@@ -119,14 +120,14 @@ class GamesDb:
     def query_all_game_modes(self):
         cursor = self.connection.cursor()
         rows = cursor.execute(
-            'SELECT DISTINCT game_mode FROM games_game_modes'
+            'SELECT DISTINCT game_mode FROM games_game_modes '
             'ORDER BY game_mode')
         return [row['game_mode'] for row in rows.fetchall()]
 
     def query_all_publishers(self):
         cursor = self.connection.cursor()
         rows = cursor.execute(
-            'SELECT DISTINCT publisher FROM games_publishers'
+            'SELECT DISTINCT publisher FROM games_publishers '
             'ORDER BY publisher')
         return [row['publisher'] for row in rows.fetchall()]
 
