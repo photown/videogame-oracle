@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request
 from predictor.success_predictor import SuccessPredictor
-from collections import defaultdict
 from db.games_db import GamesDb
 
 app = Flask(__name__)
@@ -16,29 +15,63 @@ def index():
     args['publishers'] = games_args['publishers']
     args['platforms'] = games_args['platforms']
     args['game_modes'] = games_args['game_modes']
-    user_args = defaultdict(lambda: '')
+    user_args = {}
     args['user_args'] = user_args
     if request.method == 'POST':
         print request.form
-        for arg_name in request.form:
-            if arg_name in ['genres', 'publishers', 'platforms', 'game_modes']:
-                user_args[arg_name] = request.form.getlist(arg_name)
-            else:
-                user_args[arg_name] = request.form[arg_name]
-        print "user_args = " + str(user_args)
-        predictor = SuccessPredictor()
-        average, confidence_interval = predictor.perform_cross_validation(
-            games_args['games'], games_args)
-        predictor_data = predictor.parse_data_for_predictor(
-            user_args, games_args)
-        prediction = predictor.predict(
-            games_args['games'], games_args, predictor_data)
-        args['prediction'] = ("{0:.2f}".format(
-            prediction[0]), "{0:.2f}".format(average), confidence_interval)
-        print "Prediction = " + str(prediction)
+
+        valid_args_count = extract_user_arguments(user_args, games_args,
+            request.form)
+        min_args = 1
+        if valid_args_count >= min_args:
+            print "user_args = " + str(user_args)
+            predictor = SuccessPredictor()
+            average, confidence_interval = predictor.perform_cross_validation(
+                games_args['games'], games_args, user_args)
+            predictor_data = predictor.parse_data_for_predictor(
+                user_args, games_args)
+            prediction = predictor.predict(
+                games_args['games'], games_args, predictor_data, user_args)
+            args['prediction'] = ("{0:.2f}".format(
+                prediction[0]), "{0:.2f}".format(average), confidence_interval)
+            print "Prediction = " + str(prediction)
+        else:
+            args['error'] = 'At least %d attributes must be set.' % min_args
 
     return render_template('index.html', args=args)
 
+def extract_user_arguments(user_args, games_args, form):
+    for arg_name in request.form:
+        if arg_name in ['genres', 'publishers', 'platforms', 'game_modes']:
+            user_args[arg_name] = request.form.getlist(arg_name)
+        elif arg_name in ['title', 'description', 'budget', 'release_date']:
+            user_args[arg_name] = request.form[arg_name]
+
+    valid_args_count = 0
+    for arg_name in ['genres', 'publishers', 'platforms', 'game_modes']:
+        if arg_name in user_args and type(user_args[arg_name]) is list \
+                and set(user_args[arg_name]).issubset(games_args[arg_name]):
+            valid_args_count += 1
+        else:
+            user_args[arg_name] = []
+
+    if user_args['description']:
+        valid_args_count += 1
+
+    if user_args['budget']:
+        try:
+            float(budget)
+            valid_args_count += 1
+        except ValueError:
+            user_args['budget'] = ''
+
+    if user_args['release_date']:
+        try:
+            datetime.datetime.strptime(release_date, "%Y-%m-%d")
+            valid_args_count += 1
+        except ValueError:
+            user_args['release_date'] = ''
+    return valid_args_count
 
 def get_common_keywords(all_keywords, n):
     keyword_to_count = {}

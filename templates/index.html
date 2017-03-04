@@ -7,12 +7,15 @@
       color: green;
       font-size: xx-large;
     }
+    .error {
+      color: red;
+    }
     </style>
 </head>
 <body>
     <form action="/" method='POST'>
-      Title:<br>
-      <input type="text" name="title" value='{{args.user_args.title}}'><br>
+      Title*:<br>
+      <input type="text" name="title" value='{{args.user_args.title}}' required><br>
       Description:<br>
       <textarea name="description" rows="10" cols="50">{{args.user_args.description}}</textarea><br>
       Genres:<br>
@@ -63,6 +66,9 @@
     </form>
     {% if 'prediction' in args %}
     <span class='prediction'>The game is predicted to sell {{args.prediction[0]}} million copies.<br>({{args.prediction[1]}}% confidence for ±{{args.prediction[2]}} million copies)</span>
+    {% endif %}
+    {% if 'error' in args %}
+    <span class='error'>{{args.error}}</span>
     {% endif %}
 </body>
 </html>
