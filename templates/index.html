@@ -1,74 +1,124 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Success predictor</title>
+    <title>The Videogame Oracle</title>
     <style type="text/css">
-    .prediction {
-      color: green;
-      font-size: xx-large;
+    .bg-success, .bg-danger {
+      padding: 15px;
     }
-    .error {
-      color: red;
+    .form-horizontal .form-group, .row {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
     }
     </style>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
 </head>
 <body>
-    <form action="/" method='POST'>
-      Title*:<br>
-      <input type="text" name="title" value='{{args.user_args.title}}' required><br>
-      Description:<br>
-      <textarea name="description" rows="10" cols="50">{{args.user_args.description}}</textarea><br>
-      Genres:<br>
-      <select name="genres" multiple>
-        {% for genre in args.genres %}
-            {% if genre in args.user_args.genres %}
-            <option value="{{genre}}" selected>{{genre}}</option>
-            {% else %}
-            <option value="{{genre}}">{{genre}}</option>
-            {% endif %}
-        {% endfor %}
-      </select><br>
-      Publishers:<br>
-      <select name="publishers" multiple>
-        {% for publisher in args.publishers %}
-            {% if publisher in args.user_args.publishers %}
-            <option value="{{publisher}}" selected>{{publisher}}</option>
-            {% else %}
-            <option value="{{publisher}}">{{publisher}}</option>
-            {% endif %}
-        {% endfor %}
-      </select><br>
-      Platforms:<br>
-      <select name="platforms" multiple>
-        {% for platform in args.platforms %}
-            {% if platform in args.user_args.platforms %}
-            <option value="{{platform}}" selected>{{platform}}</option>
-            {% else %}
-            <option value="{{platform}}">{{platform}}</option>
-            {% endif %}
-        {% endfor %}
-      </select><br>
-      Game modes:<br>
-      <select name="game_modes" multiple>
-        {% for game_mode in args.game_modes %}
-            {% if game_mode in args.user_args.game_modes %}
-            <option value="{{game_mode}}" selected>{{game_mode}}</option>
-            {% else %}
-            <option value="{{game_mode}}">{{game_mode}}</option>
-            {% endif %}
-        {% endfor %}
-      </select><br>
-      Budget (in millions $):<br>
-      <input name="budget" type="number" step="0.01" value='{{args.user_args.budget}}'><br>
-      Estimated release date:<br>
-      <input name="release_date" type="date" value='{{args.user_args.release_date}}'><br>
-      <input type="submit" value="Submit">
+    <h1 class="text-center">The Videogame Oracle</h1>
+    <div class="row">
+      <div class="col-sm-6 col-sm-offset-3 text-center">Fill the form with your game idea and get a prediction.</div>
+    </div>
+    <hr>
+    <form action="/" method='POST' class="form-horizontal">
+      <div class="form-group">
+        <label for="title" class="col-sm-2 col-sm-offset-2 control-label">Title*:</label>
+        <div class="col-sm-4">
+          <input type="text" class="form-control" id="title" name="title" value='{{args.user_args.title}}' required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="description" class="col-sm-2 col-sm-offset-2 control-label">Description:</label>
+        <div class="col-sm-4">
+          <textarea name="description" class="form-control" id="description" rows="10" cols="50">{{args.user_args.description}}</textarea>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="genres" class="col-sm-2 col-sm-offset-2 control-label">Genres:</label>
+        <div class="col-sm-4">
+          <select name="genres" id="genres" class="selectpicker" multiple>
+            {% for genre in args.genres %}
+                {% if genre in args.user_args.genres %}
+                <option value="{{genre}}" selected>{{genre}}</option>
+                {% else %}
+                <option value="{{genre}}">{{genre}}</option>
+                {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="publishers" class="col-sm-2 col-sm-offset-2 control-label">Publishers:</label>
+        <div class="col-sm-4">
+          <select name="publishers" id="publishers" class="selectpicker" multiple>
+            {% for publisher in args.publishers %}
+                {% if publisher in args.user_args.publishers %}
+                <option value="{{publisher}}" selected>{{publisher}}</option>
+                {% else %}
+                <option value="{{publisher}}">{{publisher}}</option>
+                {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="platforms" class="col-sm-2 col-sm-offset-2 control-label">Platforms:</label>
+        <div class="col-sm-4">
+          <select name="platforms" id="platforms" class="selectpicker" multiple>
+            {% for platform in args.platforms %}
+                {% if platform in args.user_args.platforms %}
+                <option value="{{platform}}" selected>{{platform}}</option>
+                {% else %}
+                <option value="{{platform}}">{{platform}}</option>
+                {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="game_modes" class="col-sm-2 col-sm-offset-2 control-label">Game modes:</label>
+        <div class="col-sm-4">
+          <select name="game_modes" id="game_modes" class="selectpicker" multiple>
+            {% for game_mode in args.game_modes %}
+                {% if game_mode in args.user_args.game_modes %}
+                <option value="{{game_mode}}" selected>{{game_mode}}</option>
+                {% else %}
+                <option value="{{game_mode}}">{{game_mode}}</option>
+                {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="budget" class="col-sm-2 col-sm-offset-2 control-label">Budget (mln $):</label>
+        <div class="col-sm-4">
+          <input type="number" step="0.01" class="form-control" id="budget" name="budget" value='{{args.user_args.budget}}'>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="release_date" class="col-sm-2 col-sm-offset-2 control-label">Release date:</label>
+        <div class="col-sm-4">
+          <input type="date" class="form-control" id="release_date" name="release_date" value='{{args.user_args.release_date}}'>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-4 col-sm-offset-4">
+          <input type="submit" class="btn btn-info" value="Submit">
+        </div>
+      </div>
+      
     </form>
     {% if 'prediction' in args %}
-    <span class='prediction'>The game is predicted to sell {{args.prediction[0]}} million copies.<br>({{args.prediction[1]}}% confidence for ±{{args.prediction[2]}} million copies)</span>
+    <div class="row bg-success"><h4 class="col-sm-6 col-sm-offset-3">The game is predicted to sell <strong>{{args.prediction[0]}} million</strong> copies.<br>({{args.prediction[1]}}% confidence for ±{{args.prediction[2]}} million copies)</h4></div>
     {% endif %}
     {% if 'error' in args %}
-    <span class='error'>{{args.error}}</span>
+    <div class="row bg-danger"><h4 class="col-sm-6 col-sm-offset-3">{{args.error}}</h4></div>
     {% endif %}
 </body>
 </html>
