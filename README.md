@@ -25,6 +25,4 @@ http://kotaku.com/how-much-does-it-cost-to-make-a-big-video-game-1501413649
 # What to improve
 1. More videogame data
 2. A better way to determine most relevant keywords
-3. A better-looking form
-4. Make all fields optional
-5. Improve overall confidence
+3. Improve overall confidence
