@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from predictor.success_predictor import SuccessPredictor
 from db.games_db import GamesDb
+import datetime
 
 app = Flask(__name__)
 
@@ -60,14 +61,14 @@ def extract_user_arguments(user_args, games_args, form):
 
     if user_args['budget']:
         try:
-            float(budget)
+            float(user_args['budget'])
             valid_args_count += 1
         except ValueError:
             user_args['budget'] = ''
 
     if user_args['release_date']:
         try:
-            datetime.datetime.strptime(release_date, "%Y-%m-%d")
+            datetime.datetime.strptime(user_args['release_date'], "%Y-%m-%d")
             valid_args_count += 1
         except ValueError:
             user_args['release_date'] = ''
